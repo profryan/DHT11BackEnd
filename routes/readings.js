@@ -13,6 +13,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+//Get the latest reading
+router.get('/latest', async (req, res) => {
+  try {
+    const latestReading = await Reading.findOne().sort({ date: -1 });
+    if (!latestReading) {
+      return res.status(404).json({ success: false, error: 'No data found' });
+    }
+    res.json({ success: true, data: latestReading });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Something went wrong' });
+  }
+});
+
 //get a single reading
 router.get('/:id', async (req, res) => {
   try {
